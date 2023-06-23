@@ -41,5 +41,40 @@ router.post("/login", (req, res) => {
       console.log("Error al autenticar al usuario:", error);
       res.status(500).send({ message: "Error en el servidor" });
     });
+
+  router.post("/logout", (req, res) => {
+    // Verificar si el usuario está autenticado
+    if (req.session.loggedIn) {
+      // Borrar los datos de sesión
+      req.session.destroy((err) => {
+        if (err) {
+          console.log("Error al desloguear al usuario:", err);
+          res.status(500).send({ message: "Error al desloguear al usuario" });
+        } else {
+          res.status(200).send({ message: "Deslogueo exitoso" });
+        }
+      });
+    } else {
+      res.status(401).send({ message: "El usuario no está autenticado" });
+    }
+  });
+  function requireAuth(req, res, next) {
+    // Verificar si el usuario está autenticado
+    if (req.session.loggedIn) {
+      // El usuario está autenticado, continuar con la siguiente función de middleware o ruta
+      next();
+    } else {
+      // El usuario no está autenticado, enviar una respuesta de error
+      res.status(401).send({ message: "Acceso no autorizado" });
+    }
+  }
+
+  // Ruta protegida que requiere autenticación
+  router.get("/protected", requireAuth, (req, res) => {
+    // Si el middleware requireAuth pasa, significa que el usuario está autenticado
+    res.send({ message: "Acceso autorizado" });
+  });
+
+  module.exports = router;
 });
 module.exports = router;
