@@ -1,6 +1,6 @@
 const { DataTypes, Model } = require("sequelize");
 const bcrypt = require("bcrypt");
-const sequelize = require("../db/index");
+const db = require("../db/index");
 
 class User extends Model {
   hash(password, salt) {
@@ -10,10 +10,16 @@ class User extends Model {
 
 User.init(
   {
+    userId: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      allowNull: false,
+      primaryKey: true,
+    },
     username: {
       type: DataTypes.STRING,
       allowNull: false,
-      primaryKey: true,
+      unique: true,
     },
     email: {
       type: DataTypes.STRING,
@@ -32,7 +38,7 @@ User.init(
     },
   },
   {
-    sequelize,
+    sequelize: db,
     modelName: "user",
   }
 );

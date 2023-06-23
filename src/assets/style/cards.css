@@ -1,0 +1,16 @@
+.container {
+  height: 300px;
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+}
+
+.card {
+  flex: 0 0 auto;
+  width: 200px;
+  margin-right: 10px;
+}
+
+.card img {
+  width: 100%;
+}

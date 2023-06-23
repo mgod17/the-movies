@@ -2,14 +2,35 @@ const express = require("express");
 const app = express();
 const port = 5000;
 const usersRouter = require("./routes/users");
+const moviesRouter = require("./routes/movies");
+const favoritesRoutes = require("./routes/favoriteRoute");
+const cors = require("cors");
+const db = require("../api/db/index");
+const models = require("./models/index");
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 
 // Configurar el middleware para analizar JSON en las solicitudes
 app.use(express.json());
 
 // Configurar las rutas
 app.use("/api/users", usersRouter);
+app.use("/api/movies", moviesRouter);
+app.use("/api/favoritos", favoritesRoutes);
 
 // Iniciar el servidor
-app.listen(port, () => {
-  console.log(`Servidor en funcionamiento en el puerto ${port}`);
-});
+db.sync({ force: false })
+  .then(() => {
+    console.log("db conectada");
+    app.listen(port, () => {
+      console.log("server  on port 5000");
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
