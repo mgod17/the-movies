@@ -1,24 +1,28 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Header from "./components/Header";
+import Header from "./view/Header.view";
 import MovieDetails from "./components/movieDetails";
-import { SearchProvider } from "./context/SearchContext";
-import "./App.css";
+import { SearchProvider } from "./contexts/SearchContext";
 import HomePage from "./components/HomePage";
-
+import { LoginModalProvider } from "./contexts/LoginModalContext";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function App() {
   return (
-    <Router>
-      <SearchProvider>
-        <div>
-          <Header />
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/movies/:id" element={<MovieDetails></MovieDetails>} />
-          </Routes>
-        </div>
-      </SearchProvider>
-    </Router>
+    <div>
+      <ToastContainer />
+      <LoginModalProvider>
+        <Router>
+          <SearchProvider>
+            <Header />
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/movies/:id" element={<MovieDetails />} />
+            </Routes>
+          </SearchProvider>
+        </Router>
+      </LoginModalProvider>
+    </div>
   );
 }
 

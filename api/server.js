@@ -1,4 +1,5 @@
 const express = require("express");
+const session = require("express-session");
 const app = express();
 const port = 5000;
 const usersRouter = require("./routes/users");
@@ -14,7 +15,13 @@ app.use(
     credentials: true,
   })
 );
-
+app.use(
+  session({
+    secret: "mysecret", // Cambia esto por una cadena segura
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 // Configurar el middleware para analizar JSON en las solicitudes
 app.use(express.json());
 

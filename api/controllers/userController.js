@@ -14,9 +14,9 @@ const createUser = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
     console.log("Request body:", req.body);
-    User.findOne({ where: { username } })
+    User.findOne({ where: { email } })
       .then((user) => {
         if (!user) {
           res.status(401).send({ message: "Credenciales inválidas" });
@@ -25,7 +25,7 @@ const login = async (req, res) => {
         bcrypt.compare(password, user.password, (err, result) => {
           if (result) {
             // Establecer los datos de sesión en la cookie
-            req.session.username = username;
+            req.session.email = email;
             req.session.loggedIn = true;
             res.status(200).send({ message: "Inicio de sesión exitoso bro" });
           } else {
