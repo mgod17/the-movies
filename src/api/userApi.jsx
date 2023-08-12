@@ -5,10 +5,12 @@ const API_URL = "http://localhost:5000/api";
 const userApi = {
   login: async (values) => {
     try {
-      const response = await axios.post(`${API_URL}/users/login`, values);
-      return response.data;
+      const res = await axios.post(`${API_URL}/users/login`, values, {
+        withCredentials: true,
+      });
+      return res.data;
     } catch (error) {
-      throw error.response ? error.response.data : error;
+      throw error.res ? error.res.data : error;
     }
   },
 };

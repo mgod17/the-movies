@@ -1,6 +1,6 @@
 import React from "react";
 import LoginModal from "./LoginModal.view";
-import { useLoginModal } from "../contexts/LoginModalContext";
+import { useLoginModal } from "../contexts/AuthContext";
 import {
   AppBar,
   Toolbar,

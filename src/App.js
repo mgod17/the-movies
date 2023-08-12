@@ -4,14 +4,14 @@ import Header from "./view/Header.view";
 import MovieDetails from "./components/movieDetails";
 import { SearchProvider } from "./contexts/SearchContext";
 import HomePage from "./components/HomePage";
-import { LoginModalProvider } from "./contexts/LoginModalContext";
+import { AuthProvider } from "./contexts/AuthContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 function App() {
   return (
     <div>
       <ToastContainer />
-      <LoginModalProvider>
+      <AuthProvider>
         <Router>
           <SearchProvider>
             <Header />
@@ -21,7 +21,7 @@ function App() {
             </Routes>
           </SearchProvider>
         </Router>
-      </LoginModalProvider>
+      </AuthProvider>
     </div>
   );
 }

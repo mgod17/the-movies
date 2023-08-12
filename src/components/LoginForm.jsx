@@ -1,16 +1,14 @@
 import React from "react";
 import { useFormik } from "formik";
-import { useLoginModal } from "../contexts/LoginModalContext";
+import { useLoginModal, useAuth } from "../contexts/AuthContext";
 import * as Yup from "yup";
 import { Box, Stack, TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { Link } from "react-router-dom";
-import userApi from "../api/userApi";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 const LoginForm = () => {
   const { closeModal } = useLoginModal();
+  const { singin } = useAuth();
   const signinForm = useFormik({
     initialValues: {
       email: "",
@@ -23,25 +21,8 @@ const LoginForm = () => {
         .required("password is required"),
     }),
     onSubmit: async (values) => {
-      try {
-        const loginSuccessful = await userApi.login(values);
-        console.log(loginSuccessful, "logeate");
-        if (loginSuccessful) {
-          signinForm.resetForm();
-          closeModal();
-          console.log(loginSuccessful, "logueo exitoso");
-        }
-      } catch (error) {
-        console.error("Error during login:", error);
-        console.error("Error during login:", error);
-        if (error.message) {
-          // Manejar mensajes de error específicos de la API
-          toast.success("Login successful");
-        } else {
-          // Manejar errores genéricos
-          toast.error(error.message);
-        }
-      }
+      await singin(values);
+      signinForm.resetForm();
     },
   });
   const handleUpdatePassword = () => {};

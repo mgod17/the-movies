@@ -1,6 +1,8 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
-
+const jwt = require("jsonwebtoken");
+const { validationResult } = require("express-validator");
+const { generateToken } = require("../config/token.config");
 const createUser = async (req, res) => {
   try {
     User.create(req.body).then((user) => {
@@ -15,31 +17,36 @@ const createUser = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log("Request body:", req.body);
-    User.findOne({ where: { email } })
-      .then((user) => {
-        if (!user) {
-          res.status(401).send({ message: "Credenciales inválidas" });
-          return;
-        }
-        bcrypt.compare(password, user.password, (err, result) => {
-          if (result) {
-            // Establecer los datos de sesión en la cookie
-            req.session.email = email;
-            req.session.loggedIn = true;
-            res.status(200).send({ message: "Inicio de sesión exitoso bro" });
-          } else {
-            res.status(401).send({ message: "Credenciales inválidas" });
-          }
-        });
-      })
-      .catch((error) => {
-        console.log("Error al autenticar al usuario:", error);
-        res.status(500).send({ message: "Error en el servidor" });
-      });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      return res.status(401).send({ message: "Credenciales inválidas" });
+    }
+
+    const result = await bcrypt.compare(password, user.password);
+
+    if (result) {
+      const payload = {
+        userId: user.id,
+        email: user.email,
+        username: user.username,
+        createdAt: user.createdAt,
+      };
+      const token = await generateToken(user);
+      res.cookie("token", token, { httpOnly: true, secure: true });
+      return res
+        .status(200)
+        .send({ message: "Inicio de sesión exitoso", payload });
+    } else {
+      return res.status(401).send({ message: "Credenciales inválidas" });
+    }
   } catch (error) {
-    console.log("Error al autenticar al usuario:", error);
-    res.status(500).send({ message: "Error en el servidor" });
+    console.error("Error al autenticar al usuario:", error);
+    return res.status(500).send({ message: "Error en el servidor" });
   }
 };
 

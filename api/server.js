@@ -8,23 +8,13 @@ const favoritesRoutes = require("./routes/favoriteRoute");
 const cors = require("cors");
 const db = require("../api/db/index");
 const models = require("./models/index");
+require("dotenv").config();
+const cookieParser = require("cookie-parser");
 
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-    credentials: true,
-  })
-);
-app.use(
-  session({
-    secret: "mysecret", // Cambia esto por una cadena segura
-    resave: false,
-    saveUninitialized: true,
-  })
-);
-// Configurar el middleware para analizar JSON en las solicitudes
 app.use(express.json());
-
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(cookieParser());
+// Configurar el middleware para analizar JSON en las solicitudes
 // Configurar las rutas
 app.use("/api/users", usersRouter);
 app.use("/api/movies", moviesRouter);

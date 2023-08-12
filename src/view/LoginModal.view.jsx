@@ -1,6 +1,6 @@
 import { Box, Modal } from "@mui/material";
 import React from "react";
-import { useLoginModal } from "../contexts/LoginModalContext";
+import { useLoginModal } from "../contexts/AuthContext";
 import LoginForm from "../components/LoginForm";
 
 const LoginModal = () => {
