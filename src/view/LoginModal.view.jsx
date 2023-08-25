@@ -4,9 +4,10 @@ import { useLoginModal } from "../contexts/AuthContext";
 import LoginForm from "../components/LoginForm";
 
 const LoginModal = () => {
-  const { isModalOpen } = useLoginModal();
+  const { isModalOpen, setIsModalOpen } = useLoginModal();
+
   return (
-    <Modal open={isModalOpen}>
+    <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
       <Box
         sx={{
           position: "absolute",

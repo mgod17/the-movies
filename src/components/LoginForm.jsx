@@ -1,13 +1,12 @@
 import React from "react";
 import { useFormik } from "formik";
-import { useLoginModal, useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 import * as Yup from "yup";
 import { Box, Stack, TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { Link } from "react-router-dom";
 
 const LoginForm = () => {
-  const { closeModal } = useLoginModal();
   const { singin } = useAuth();
   const signinForm = useFormik({
     initialValues: {
