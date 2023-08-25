@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import LoginModal from "./LoginModal.view";
-import { useLoginModal } from "../contexts/AuthContext";
+import { AuthContext } from "../contexts/AuthContext";
 import {
   AppBar,
   Toolbar,
@@ -24,7 +24,7 @@ const LoginIcon = styled(IconButton)(({ theme }) => ({
 }));
 
 const Header = () => {
-  const { isModalOpen, openModal, closeModal, login } = useLoginModal();
+  const { isModalOpen, openModal, closeModal, login } = useContext(AuthContext);
 
   return (
     <div>

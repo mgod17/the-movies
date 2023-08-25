@@ -3,7 +3,8 @@ import userApi from "../api/userApi";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
+
 export const useAuth = () => {
   const context = useContext(AuthContext);
 
@@ -15,10 +16,10 @@ export const useAuth = () => {
 };
 
 export function AuthProvider({ children }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoggedError, setIsLoggedError] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -32,9 +33,9 @@ export function AuthProvider({ children }) {
     try {
       const res = await userApi.login(user, { withCredentials: true });
       setUser(res.payload);
-      closeModal();
       setIsAuthenticated(true);
       setIsLoggedError(false);
+      closeModal();
       toast.success("login succesful");
       return res;
     } catch (err) {
@@ -44,24 +45,20 @@ export function AuthProvider({ children }) {
       return err;
     }
   };
+
   const logout = () => {};
 
   return (
     <AuthContext.Provider
       value={{
-        isModalOpen,
-        setIsModalOpen,
-        openModal,
-        closeModal,
         singin,
         logout,
+        isModalOpen,
+        openModal,
+        closeModal,
       }}
     >
       {children}
     </AuthContext.Provider>
   );
-}
-
-export function useLoginModal() {
-  return useContext(AuthContext);
 }

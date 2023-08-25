@@ -1,13 +1,13 @@
 import { Box, Modal } from "@mui/material";
-import React from "react";
-import { useLoginModal } from "../contexts/AuthContext";
+import React, { useContext } from "react";
+import { AuthContext } from "../contexts/AuthContext";
 import LoginForm from "../components/LoginForm";
 
 const LoginModal = () => {
-  const { isModalOpen, setIsModalOpen } = useLoginModal();
+  const { isModalOpen, closeModal } = useContext(AuthContext);
 
   return (
-    <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
+    <Modal open={isModalOpen} onClose={closeModal}>
       <Box
         sx={{
           position: "absolute",
